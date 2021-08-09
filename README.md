@@ -58,6 +58,72 @@ php đa thừa kế?
 khóa chính vs khóa ngoại
 
 khóa chính có phải index k? *Index thường được tạo mặc định cho primary key, foreign key*
+
+#### php basic
+1) parent::methodName() hoặc parent::propertyName
+2) self:$property/method =>  class nó extend 
+static: $property/method => property của instance
+className:$property/method => truy cập property bên ngoài method của class
+3) magic method
+4) namespace
+định danh cho 1 class
+vd: có 2 file php có class trùng tên nhau thì phải khai báo namespace
+include 'ConNguoi.php';
+$connguoi = new ConNguoi\ConNguoi();
+
+include 'ConNguoi.php';
+use ConNguoi as People;
+$connguoi = new People\ConNguoi();
+5) Giải quyết đơn thừa kế
+Traits là một module giúp cho chúng ta có thể sử dụng lại các phương thức, thuộc tính được khai báo trong trait  vào các class sử dụng nó
++ method trong 2 trait trùng tên
+   => overide lại method đó hoặ dùng insteadof
+use SetGetName, SetGetAge {
+        //ưu tiên sử dụng phương thức getall của trait SetGetAge
+        SetGetAge::getAll insteadof SetGetName;
+    }
+6) lambda vs clousure
+- là anonymous function: khai báo bất cứ đâu và k reuse dc
+- lambda 
+function (argument)
+{
+    //code
+}
+
+hoặc dùng 
+create_function('', argument);
+- clousure có thể truy cập các biến bên ngoài function
+function (argument) use (scope) {
+    //code
+}
+7) magic method
+_construct
+_destruct
+_autoload: được gọi khi một đối tượng không được xác định
+_set:  được gọi khi chúng ta thiết lập giá trị cho một thuộc tính không được phép truy cập từ bên ngoài, hoặc không tồn tại
+_get: được gọi khi chúng ta lấy ra giá trị của các thuộc tính trong đối mà chúng ta không được phép truy cập nó từ bên ngoài hoặc không tồn tại.
+
+8) request -> public/index.php(khởi chạy autoload -> khởi tạo application  và các interface )
+ -> kernel.php 
+register service provider (config/app.php)
+bootstrap service provider -> router -> middleware -> controller/action -> response/view
+
+9) dependency injection:
+Class A hoạt đông phụ thuộc vào class B,
+thay vì tạo instance của class B trong class A, thì sẽ inject instance của class B trong constructor hoặc setter
+
+10)  Eager Loading: giải quyết vấn đề N + 1
+// Eager Loading
+$posts = Post::with('user')->all();
+11) method and property
+$category->posts->count(): query tất cả các bài post thuộc category hiện tại, và tạo mới posts property và lưu kết quả lại tại lần chạy đầu tiên.
+Gọi lệnh này bn lần thì chỉ chạy 1 lần tại thời điểm tạo property thôi
+$category->posts()->count(): query db mỗi lần gọi
+
+10) Reflection: cung cấp các function để get thông tin của object như class, method, interface,..
+- get_class()
+- get_class_method()
+- method_exists()
 #### Unicode and UTF-8
 - Các kí tự latin được biểu diễn trong bảng mã asscii chỉ cần dùng 1 byte: 0-255
 - Các kí tự châu Á cần nhiều byte hơn => UTF biểu diễn kí tự dùng 2 bytes: 0-65
